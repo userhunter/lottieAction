@@ -20,3 +20,5 @@
 });
 
 3） 动画的取消是使用cancelAnimation(),而不是clearAnimation()
+
+4） 新增了开源组件MMKV的使用方法
