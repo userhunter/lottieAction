@@ -1,11 +1,14 @@
 package com.example.lottie;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.lottie.utils.SharedPreferencesUtils;
 import com.tencent.mmkv.MMKV;
 
 public class MainActivity extends Activity {
@@ -25,6 +28,8 @@ public class MainActivity extends Activity {
         initMMKV();
 
         printData();
+
+        useMMKVimportSp();
     }
 
 
@@ -50,11 +55,31 @@ public class MainActivity extends Activity {
         mMMKV.encode("label",true);
         mMMKV.encode("later",4);
         mMMKV.encode("go","str");
+
+
+        SharedPreferencesUtils.setAddStatus(this,5);
+        SharedPreferencesUtils.setStatus(this,true);
     }
 
     private void printData(){
         Log.d(TAG,"label:"+mMMKV.getBoolean("lable",false));
         Log.d(TAG,"label:"+mMMKV.getInt("later",0));
         Log.d(TAG,"label:"+mMMKV.getString("go","hello"));
+        Log.d(TAG,"add:"+SharedPreferencesUtils.getAddStatus(this));
+    }
+
+    private void  useMMKVimportSp(){
+        Log.d(TAG,"use the mmkv to show sp data.");
+        MMKV mmkv = MMKV.mmkvWithID(SharedPreferencesUtils.PreferencesName);
+
+        // 做数据迁移
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferencesUtils.PreferencesName,Context.MODE_PRIVATE);
+        mmkv.importFromSharedPreferences(sharedPreferences);
+        sharedPreferences.edit().clear().commit();
+
+        // 打印迁移之后的数据
+        Log.d(TAG,"add::"+mmkv.getInt(SharedPreferencesUtils.KEY_ADD,0));
+        Log.d(TAG,"status::"+mmkv.getBoolean(SharedPreferencesUtils.KEY_STATUS,false));
+
     }
 }
