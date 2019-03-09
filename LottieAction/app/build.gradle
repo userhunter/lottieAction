@@ -22,4 +22,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation 'com.airbnb.android:lottie:2.1.0'
     implementation 'com.airbnb.android:lottie:2.6.0-beta19'
+    implementation 'com.tencent:mmkv:1.0.10'
 }

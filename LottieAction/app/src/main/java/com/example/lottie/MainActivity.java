@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.tencent.mmkv.MMKV;
 
 public class MainActivity extends Activity {
 
     private  static final String TAG = "MainActivity";
 
     private LottieAnimationView animationView;
+    private MMKV mMMKV;
 
 
     @Override
@@ -19,14 +21,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initLottieAnimation();
+
+        initMMKV();
+
+        printData();
     }
 
 
     private void initLottieAnimation(){
         animationView = (LottieAnimationView)findViewById(R.id.animation_view);
-//        animationView.setAnimation("bubble_1.json");
-        animationView.setAnimation("lottie_data_origin.json");
+//        animationView.setAnimation("lottie_data_origin.json");
+        animationView.setAnimation("btn.json");
+        animationView.setImageAssetsFolder("images");
         animationView.loop(true);
+
         animationView.playAnimation();
         animationView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,5 +43,18 @@ public class MainActivity extends Activity {
                 animationView.cancelAnimation();
             }
         });
+    }
+
+    private void initMMKV(){
+        mMMKV = MMKV.defaultMMKV();
+        mMMKV.encode("label",true);
+        mMMKV.encode("later",4);
+        mMMKV.encode("go","str");
+    }
+
+    private void printData(){
+        Log.d(TAG,"label:"+mMMKV.getBoolean("lable",false));
+        Log.d(TAG,"label:"+mMMKV.getInt("later",0));
+        Log.d(TAG,"label:"+mMMKV.getString("go","hello"));
     }
 }
