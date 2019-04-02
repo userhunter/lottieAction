@@ -5,14 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_view"
+    <ImageView
+        android:id="@+id/qrcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="produceQRCode"
-        android:text="QRCode"/>
 </LinearLayout>

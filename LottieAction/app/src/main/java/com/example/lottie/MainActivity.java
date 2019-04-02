@@ -2,8 +2,11 @@ package com.example.lottie;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -11,18 +14,27 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.lottie.utils.SharedPreferencesUtils;
 import com.tencent.mmkv.MMKV;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements  Handler.Callback{
 
     private  static final String TAG = "MainActivity";
 
     private LottieAnimationView animationView;
     private MMKV mMMKV;
 
+    private Handler mHandler;
+    private static final int MESSAGE_CANCEL_ANIMATION = 1;   // 取消当前的动画效果
+
+    private void initHanlder(){
+        mHandler = new Handler(this);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initHanlder();
         initLottieAnimation();
 
         initMMKV();
@@ -35,9 +47,9 @@ public class MainActivity extends Activity {
 
     private void initLottieAnimation(){
         animationView = (LottieAnimationView)findViewById(R.id.animation_view);
-//        animationView.setAnimation("lottie_data_origin.json");
-        animationView.setAnimation("btn.json");
-        animationView.setImageAssetsFolder("images");
+        animationView.setAnimation("lottie_data_origin.json");
+//        animationView.setAnimation("btn.json");
+//        animationView.setImageAssetsFolder("images");
         animationView.loop(true);
 
         animationView.playAnimation();
@@ -45,7 +57,11 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 取消动画使用cancelAnimation
-                animationView.cancelAnimation();
+                if(animationView.isAnimating()){
+                    Log.d(TAG,"animation is going");
+                    animationView.cancelAnimation();
+                }
+
             }
         });
     }
@@ -81,5 +97,15 @@ public class MainActivity extends Activity {
         Log.d(TAG,"add::"+mmkv.getInt(SharedPreferencesUtils.KEY_ADD,0));
         Log.d(TAG,"status::"+mmkv.getBoolean(SharedPreferencesUtils.KEY_STATUS,false));
 
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        return false;
+    }
+
+    public void produceQRCode(View view){
+        Intent intent = new Intent(this,QRcodeActivity.class);
+        startActivity(intent);
     }
 }
